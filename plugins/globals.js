@@ -1,7 +1,7 @@
 import Vue from 'vue'
-if (process.BROWSER_BUILD) {
+if (process.browser) {
     const ElementUI = require('element-ui')
-    const locale = require('element-ui/lib/locale/lang/en')
+    const locale = require('element-ui/lib/locale/lang/ru-RU')
 
     Vue.use(ElementUI, { locale })
 }
