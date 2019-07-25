@@ -31,7 +31,8 @@
         name: "AppPost",
         methods:{
             openPost(){
-                console.log('test');
+                const id = 'test-id'
+                this.$router.push(`/post/${id}`)
             }
         }
     }
