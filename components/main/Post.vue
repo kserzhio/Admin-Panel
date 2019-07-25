@@ -31,7 +31,7 @@
         name: "AppPost",
         methods:{
             openPost(){
-
+                console.log('test');
             }
         }
     }
