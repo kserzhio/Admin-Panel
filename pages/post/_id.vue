@@ -24,6 +24,12 @@
            <p>Lorem>Lorem >Lorem >Lorem >Lorem >Loremv</p>
        </main>
        <footer>
+           <AppCommentForm
+                   v-if="canAddComment"
+                   @created="createCommentHandler"
+           >
+
+           </AppCommentForm>
             <div class="comments" v-if="true">
             <app-comment
                     v-for="comment in 4"
@@ -40,13 +46,24 @@
 
 <script>
     import AppComment from '~/components/main/Comment'
+    import AppCommentForm from '~/components/main/CommentForm'
     export default {
         name: "_id",
         components:{
-          AppComment
+          AppComment,AppCommentForm
         },
         validate({params}){
             return Boolean(params.id)
+        },
+        data(){
+            return{
+                canAddComment:true
+            }
+        },
+        methods:{
+            createCommentHandler(){
+                this.canAddComment = false;
+            }
         }
     }
 </script>
