@@ -74,9 +74,7 @@
                             }
                            await this.$store.dispatch('auth/login',formData)
                            this.$router.push('/admin')
-                           console.log('test')
                        } catch (e) {
-                           console.log(e)
                            this.loading = false;
                        }
                    }
