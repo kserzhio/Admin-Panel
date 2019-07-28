@@ -36,6 +36,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+server/keys/keys.dev.js
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -86,5 +87,3 @@ sw.*
 
 # Mac OSX
 .DS_Store
-
-server/keys/keys.dev.js
