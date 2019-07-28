@@ -24,14 +24,20 @@ module.exports = {
   ],
 
   plugins: [
-    '@/plugins/globals.js'
+    '@/plugins/globals.js',
+    '@/plugins/axios.js'
   ],
 
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/pwa',
   ],
 
   axios: {},
+
+  env:{
+    appName:'Kostenko Blog'
+  },
 
   build: {
     transpile: [/^element-ui/],

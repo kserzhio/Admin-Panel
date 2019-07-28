@@ -8,21 +8,24 @@ config.dev = !(process.env.NODE_ENV === 'production')
 
 async function start() {
   const nuxt = new Nuxt(config)
-  const { host, port } = nuxt.options.server
+
+  const {
+    host = process.env.HOST || '127.0.0.1',
+    port = process.env.PORT || 3000
+  } = nuxt.options.server
+
   if (config.dev) {
     const builder = new Builder(nuxt)
     await builder.build()
-  } else {
-    await nuxt.ready()
   }
+
   app.use(nuxt.render)
 
-  app.listen(port, host,() =>{
+  app.listen(port, host, () => {
     consola.ready({
       message: `Server listening on http://${host}:${port}`,
       badge: true
     })
   })
-
 }
 start()

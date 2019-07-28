@@ -1,100 +1,116 @@
 <template>
-   <article class="post">
-       <header class="post-header">
-           <div class="post-title">
-               <h1>Post title</h1>
-                <nuxt-link to="/">
-                    <i class="el-icon-back"></i>
-                </nuxt-link>
-           </div>
-           <div class="post-info">
-               <small>
-                   <i class="el-icon-time"></i>
-                   {{new Date().toLocaleString()}}
-               </small>
-               <small>
-                   <i class="el-icon-view">23</i>
-               </small>
-           </div>
-           <div class="post-img">
-               <img src="https://www.tripzaza.com/ru/destinations/files/2017/09/Berlin-e1505798693967.jpg" class="post-img" align="post image">
-           </div>
-       </header>
-       <main class="post-content">
-           <p>Lorem>Lorem >Lorem >Lorem >Lorem >Loremv</p>
-       </main>
-       <footer>
-           <AppCommentForm
-                   v-if="canAddComment"
-                   @created="createCommentHandler"
-           >
-
-           </AppCommentForm>
-            <div class="comments" v-if="true">
-            <app-comment
-                    v-for="comment in 4"
-                    :key="comment"
-                    :comment="comment"
-            >
-
-            </app-comment>
-            </div>
-           <div v-else class="text-center">No Comment</div>
-       </footer>
-   </article>
+  <article class="post">
+    <header class="post-header">
+      <div class="post-title">
+        <h1>{{post.title}}</h1>
+        <nuxt-link to="/">
+          <i class="el-icon-back"></i>
+        </nuxt-link>
+      </div>
+      <div class="post-info">
+        <small>
+          <i class="el-icon-time"></i>
+          {{ post.date | date }}
+        </small>
+        <small>
+          <i class="el-icon-view"></i>
+          {{post.views}}
+        </small>
+      </div>
+      <div class="post-image">
+        <img
+          :src="post.imageUrl"
+          alt="post image"
+        >
+      </div>
+    </header>
+    <main class="post-content">
+      <vue-markdown>{{post.text}}</vue-markdown>
+    </main>
+    <footer>
+      <app-comment-form
+              :postId="post._id"
+        v-if="canAddComment"
+        @created="createCommentHandler"
+      />
+      <div class="comments" v-if="post.comments.length">
+        <app-comment
+          v-for="comment in post.comments"
+          :key="comment._id"
+          :comment="comment"
+        />
+      </div>
+      <div class="text-center" v-else>Комментариев нет</div>
+    </footer>
+  </article>
 </template>
 
 <script>
-    import AppComment from '~/components/main/Comment'
-    import AppCommentForm from '~/components/main/CommentForm'
-    export default {
-        name: "_id",
-        components:{
-          AppComment,AppCommentForm
-        },
-        validate({params}){
-            return Boolean(params.id)
-        },
-        data(){
-            return{
-                canAddComment:true
-            }
-        },
-        methods:{
-            createCommentHandler(){
-                this.canAddComment = false;
-            }
-        }
+import AppComment from '@/components/main/Comment'
+import AppCommentForm from '@/components/main/CommentForm'
+
+export default {
+  validate({params}) {
+    return Boolean(params.id)
+  },
+  head(){
+    return{
+      title: `${this.post.title} | ${process.env.appName}`
     }
+  },
+  async asyncData({store,params}){
+    const post = await store.dispatch('post/fetchById',params.id)
+    await store.dispatch('post/addView',post)
+    return {
+      post: {...post, views: ++post.views}
+    }
+  },
+  data() {
+    return {
+      canAddComment: true
+    }
+  },
+  methods: {
+    createCommentHandler(comment) {
+      this.post.comments.unshift(comment)
+      this.canAddComment = false
+    }
+  },
+  components: {AppComment, AppCommentForm}
+}
 </script>
 
 <style lang="scss" scoped>
-.post{
+  .post {
     max-width: 600px;
     margin: 0 auto;
-}
-    .post-title{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        align-items: center;
-    }
-    .post-info{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-        align-items: center;
-    }
-    .post-img{
-        img{
-            width: 100%;
-            height: auto;
-        }
-    }
-    .post-header{
-        margin-bottom: 1.5rem;
-    }
-    .post-content{
-        margin-bottom: 2rem;
-    }
+  }
+
+  .post-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .5rem;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .post-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .post-content {
+    margin-bottom: 2rem;
+  }
 </style>
+

@@ -5,14 +5,14 @@
            class="post"
    >
        <header slot="header" class="post-header">
-           <h3>Post Title</h3>
+           <h3>{{post.title}}</h3>
            <small>
                <i class="el-icon-time"></i>
-               {{new Date().toLocaleString()}}
+               {{post.date | date('date')}}
            </small>
        </header>
        <div class="post-body">
-           <img src="https://www.tripzaza.com/ru/destinations/files/2017/09/Berlin-e1505798693967.jpg" class="post-img" align="post image">
+           <img :src="post.imageUrl" class="post-img" align="post image">
        </div>
        <footer class="post-footer">
             <el-button
@@ -20,7 +20,7 @@
                     @click="openPost"
             >Open</el-button>
            <span>
-               <i class="el-icon-message">12</i>
+               <i class="el-icon-message">{{post.comments.length}}</i>
            </span>
        </footer>
    </el-card>
@@ -29,9 +29,15 @@
 <script>
     export default {
         name: "AppPost",
+        props:{
+          post:{
+              type:Object,
+              required:true
+          }
+        },
         methods:{
             openPost(){
-                const id = 'test-id'
+                const id = this.post._id
                 this.$router.push(`/post/${id}`)
             }
         }
