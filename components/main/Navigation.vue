@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <h1>SSR BLOG</h1>
+        <h1>Kostenko BLOG</h1>
     </nav>
 </template>
 
